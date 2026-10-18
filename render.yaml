@@ -3,7 +3,7 @@ services:
   - type: web
     name: sms-web-app
     runtime: node
-    repoPath: sms-web 
+    repoPath: sms
     buildCommand: npm install
     startCommand: npm start
     envVars:
@@ -16,7 +16,7 @@ services:
   - type: worker
     name: discord-bot-service
     runtime: node
-    repoPath: discord-bot
+    repoPath: bots/discord
     buildCommand: npm install
     startCommand: npm start
     envVars:
@@ -31,7 +31,7 @@ services:
   - type: web
     name: main-api-service
     runtime: node
-    repoPath: api-service
+    repoPath: api
     buildCommand: npm install
     startCommand: npm start
     envVars:
