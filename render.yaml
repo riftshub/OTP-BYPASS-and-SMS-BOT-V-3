@@ -1,22 +1,21 @@
 services:
-  # 1. The SMS Web Frontend/Backend (Using Express & Socket.io)
   - type: web
     name: sms-web-app
     runtime: node
-    repoPath: sms
+    rootDir: sms
     buildCommand: npm install
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
       - key: MONGO_URI
-        generateValue: true
+        sync: false
 
-  # 2. The Discord Bot Component
   - type: worker
     name: discord-bot-service
     runtime: node
-    repoPath: bots/discord
+    plan: starter
+    rootDir: bots/discord
     buildCommand: npm install
     startCommand: npm start
     envVars:
@@ -27,11 +26,11 @@ services:
       mountPath: /data
       sizeGB: 1
 
-  # 3. The Standalone API Service
   - type: web
     name: main-api-service
     runtime: node
-    repoPath: api
+    plan: starter
+    rootDir: api
     buildCommand: npm install
     startCommand: npm start
     envVars:
