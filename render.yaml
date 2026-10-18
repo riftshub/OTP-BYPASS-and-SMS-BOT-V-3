@@ -3,28 +3,25 @@ services:
   - type: web
     name: sms-web-app
     runtime: node
-    # Adjust 'repoPath' if the code lives in a subdirectory
-    repoPath: ./sms-web 
+    repoPath: sms-web 
     buildCommand: npm install
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
-      # Note: Mongoose is a dependency, so you will need a MongoDB URI string
       - key: MONGO_URI
-        sync: true
+        generateValue: true
 
   # 2. The Discord Bot Component
   - type: worker
     name: discord-bot-service
     runtime: node
-    repoPath: ./discord-bot
+    repoPath: discord-bot
     buildCommand: npm install
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
-    # Attaching a persistent disk because this bot uses sqlite3 locally
     disk:
       name: discord-bot-db
       mountPath: /data
@@ -34,13 +31,12 @@ services:
   - type: web
     name: main-api-service
     runtime: node
-    repoPath: ./api-service
+    repoPath: api-service
     buildCommand: npm install
     startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
-    # Attaching a separate disk since this service also depends on sqlite3
     disk:
       name: api-service-db
       mountPath: /data
