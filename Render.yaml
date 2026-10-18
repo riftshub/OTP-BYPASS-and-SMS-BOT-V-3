@@ -1,21 +1,47 @@
 services:
+  # 1. The SMS Web Frontend/Backend (Using Express & Socket.io)
   - type: web
-    name: api
+    name: sms-web-app
     runtime: node
-    rootDir: api
+    # Adjust 'repoPath' if the code lives in a subdirectory
+    repoPath: ./sms-web 
     buildCommand: npm install
     startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Note: Mongoose is a dependency, so you will need a MongoDB URI string
+      - key: MONGO_URI
+        sync: true
 
+  # 2. The Discord Bot Component
   - type: worker
-    name: discord-bot
+    name: discord-bot-service
     runtime: node
-    rootDir: bots/discord
+    repoPath: ./discord-bot
     buildCommand: npm install
     startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+    # Attaching a persistent disk because this bot uses sqlite3 locally
+    disk:
+      name: discord-bot-db
+      mountPath: /data
+      sizeGB: 1
 
+  # 3. The Standalone API Service
   - type: web
-    name: sms
+    name: main-api-service
     runtime: node
-    rootDir: sms
+    repoPath: ./api-service
     buildCommand: npm install
     startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+    # Attaching a separate disk since this service also depends on sqlite3
+    disk:
+      name: api-service-db
+      mountPath: /data
+      sizeGB: 1
