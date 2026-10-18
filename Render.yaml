@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: api
+    runtime: node
+    rootDir: api
+    buildCommand: npm install
+    startCommand: npm start
+
+  - type: worker
+    name: discord-bot
+    runtime: node
+    rootDir: bots/discord
+    buildCommand: npm install
+    startCommand: npm start
+
+  - type: web
+    name: sms
+    runtime: node
+    rootDir: sms
+    buildCommand: npm install
+    startCommand: npm start
